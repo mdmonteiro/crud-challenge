@@ -31,7 +31,7 @@ public class ClientService {
 	@Transactional(readOnly = true)
 	public ClientDTO findById(Long id) {
 		Client client = clientRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado."));
+				.orElseThrow(() -> new ResourceNotFoundException("Cliente Inexistente."));
 
 		return mapper.map(client, ClientDTO.class);
 	}
@@ -56,13 +56,13 @@ public class ClientService {
 	@Transactional
 	public ClientDTO update(Long id, ClientDTO dto) {
 		try {
-			Client product = clientRepository.getReferenceById(id);
-			convertDtoToEntity(dto, product);
-			clientRepository.save(product);
+			Client client = clientRepository.getReferenceById(id);
+			convertDtoToEntity(dto, client);
+			clientRepository.save(client);
 
-			return mapper.map(product, ClientDTO.class);
+			return mapper.map(client, ClientDTO.class);
 		} catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Produto não encontrado.");
+			throw new ResourceNotFoundException("Cliente não encontrado.");
 		}
 
 	}
@@ -70,7 +70,7 @@ public class ClientService {
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void delete(Long id) {
 		if (!clientRepository.existsById(id)) {
-			throw new ResourceNotFoundException("Produto não encontrado.");
+			throw new ResourceNotFoundException("Cliente não encontrado.");
 		}
 		try {
 			clientRepository.deleteById(id);
